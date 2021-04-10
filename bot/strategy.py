@@ -365,14 +365,14 @@ class Strategy:
         if not self._parameters["trendFollowing"]:
             indicator = Indicator(side=-indicator.side, rw=indicator.rw)
 
-        logger.info("Indicator {side: %d, rw: %.4f}", indicator.side, indicator.rw)
+        logger.info("Indicator {side: %d, rw: %.4f}, pair: %s", indicator.side, indicator.rw, self.pair)
         await self._log_queue.put(
             "当前指标 {side: %d, rw: %.4f}" % (indicator.side, indicator.rw)
         )
         # Should trade according to the indicator?
         result = self.should_trade(indicator)
         if result.code == 0:
-            logger.info("Could not satisfy the trading condition: %s", result.reason)
+            logger.info("Could not satisfy the trading condition: %s, pair: %s", result.reason, self.pair)
             await self._log_queue.put("不满足交易条件：{}".format(result.reason))
             return
 
